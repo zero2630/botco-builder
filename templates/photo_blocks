@@ -1,0 +1,34 @@
+from aiogram import Router, F
+from aiogram.types import Message
+from aiogram.fsm.context import FSMContext
+from keyboards import reply
+
+import states
+
+router = Router()
+
+{% for block in blocks -%}
+
+@router.message({% if block.father_state %}states.Line{{ block.root_block }}.{{ block.father_state }}, {% endif %}F.photo"))
+async def text_answer{{ block.id }}(message: Message, state: FSMContext):
+
+    {% if block.state -%}
+
+    await state.set_state(states.Line{{ block.root_block }}.{{ block.state }})
+
+    {%- endif %}
+
+    {%- if block.father_state and not block.state -%}
+
+    await state.clear()
+
+    {%- endif %}
+
+    await message.reply(
+        photo="{{ block.parameters.url }}",
+         {% if block.parameters.caption %}caption="{{ block.parameters.caption }}",{% endif %}
+        {% if block.parameters.keyboard %}reply_markup=reply.{{ block.parameters.keyboard }}{% endif %}
+    )
+
+
+{% endfor %}

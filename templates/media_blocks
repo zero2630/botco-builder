@@ -1,0 +1,88 @@
+from aiogram import Router, F
+from aiogram.types import Message, FSInputFile
+from aiogram.fsm.context import FSMContext
+from keyboards import reply
+
+import states
+
+router = Router()
+
+BOT_ID = "{{ bot_uid }}"
+
+{% for block in blocks.image -%}
+
+@router.message({% if block.father_state %}states.Line{{ block.root_block }}.{{ block.father_state }}, {% endif %}F.text.lower().in_("{{ block.parameters.trigger }}"))
+async def image_answer{{ block.id }}(message: Message, state: FSMContext):
+
+    {% if block.state -%}
+
+    await state.set_state(states.Line{{ block.root_block }}.{{ block.state }})
+
+    {%- endif %}
+
+    {%- if block.father_state and not block.state -%}
+
+    await state.clear()
+
+    {%- endif %}
+    file = FSInputFile(path=rf"bots/{BOT_ID}/media/{{block.parameters.filename}}")
+    await message.answer_photo(
+        photo=file,
+        caption="{{ block.parameters.message }}",
+        {% if block.parameters.keyboard %}reply_markup=reply.{{ block.parameters.keyboard }}{% endif %}
+    )
+
+
+{% endfor %}
+
+{% for block in blocks.audio -%}
+
+@router.message({% if block.father_state %}states.Line{{ block.root_block }}.{{ block.father_state }}, {% endif %}F.text.lower().in_("{{ block.parameters.trigger }}"))
+async def image_answer{{ block.id }}(message: Message, state: FSMContext):
+
+    {% if block.state -%}
+
+    await state.set_state(states.Line{{ block.root_block }}.{{ block.state }})
+
+    {%- endif %}
+
+    {%- if block.father_state and not block.state -%}
+
+    await state.clear()
+
+    {%- endif %}
+    file = FSInputFile(path=rf"bots/{BOT_ID}/media/{{block.parameters.filename}}")
+    await message.answer_audio(
+        audio=file,
+        caption="{{ block.parameters.message }}",
+        {% if block.parameters.keyboard %}reply_markup=reply.{{ block.parameters.keyboard }}{% endif %}
+    )
+
+
+{% endfor %}
+
+{% for block in blocks.document -%}
+
+@router.message({% if block.father_state %}states.Line{{ block.root_block }}.{{ block.father_state }}, {% endif %}F.text.lower().in_("{{ block.parameters.trigger }}"))
+async def image_answer{{ block.id }}(message: Message, state: FSMContext):
+
+    {% if block.state -%}
+
+    await state.set_state(states.Line{{ block.root_block }}.{{ block.state }})
+
+    {%- endif %}
+
+    {%- if block.father_state and not block.state -%}
+
+    await state.clear()
+
+    {%- endif %}
+    file = FSInputFile(path=rf"bots/{BOT_ID}/media/{{block.parameters.filename}}")
+    await message.answer_document(
+        document=file,
+        caption="{{ block.parameters.message }}",
+        {% if block.parameters.keyboard %}reply_markup=reply.{{ block.parameters.keyboard }}{% endif %}
+    )
+
+
+{% endfor %}

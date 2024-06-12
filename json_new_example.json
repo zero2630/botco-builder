@@ -1,0 +1,215 @@
+{
+"keyboards": [
+{
+  "name": "start_keyboard",
+  "type": "reply",
+  "rows": [
+    ["картинки", "музыка", "документы"],
+    ["викторина"]
+  ]
+},
+
+{
+  "name": "images_keyboard",
+  "type": "reply",
+  "rows": [
+    ["картинка?", "картинка.", "картинка!"]
+    ]
+},
+
+{
+  "name": "document_keyboard",
+  "type": "reply",
+  "rows": [
+    ["суперсекретный документ"]
+  ]
+},
+
+{
+  "name": "audio_keyboard",
+  "type": "reply",
+  "rows": [
+    ["pepe"],
+    ["lofi"]
+  ]
+},
+
+{
+  "name": "quiz_keyboard",
+  "type": "reply",
+  "rows": [
+    ["да."],
+    ["нет."]
+  ]
+}
+
+],
+
+"blocks": [
+
+{
+  "id": 1,
+  "type": "start",
+  "parameters": {
+    "message": "Добро пожаловать! Я бот, созданный с помощью конструктора Bot.co! Выберите действие.",
+  "keyboard": "start_keyboard"
+  },
+  "father": null,
+  "children": []
+},
+
+{
+  "id": 2,
+  "type": "message",
+  "parameters": {
+  "trigger": "картинки",
+   "message": " ура! картинки!",
+  "keyboard": "start_keyboard"
+  },
+  "father": null,
+  "children": [3, 4, 5]
+},
+
+{
+  "id": 3,
+  "type": "media",
+  "parameters": {
+  "media-type": "image",
+  "filename": "img1.png",
+  "trigger": "картинка.",
+   "caption": " держи картинку",
+  "keyboard": "start_keyboard"
+  },
+  "father": 2,
+  "children": []
+},
+{
+  "id": 4,
+  "type": "media",
+  "parameters": {
+  "media-type": "image",
+  "filename": "img2.png",
+  "trigger": "картинка?",
+   "caption": " держи картинку",
+  "keyboard": "start_keyboard"
+  },
+  "father": 2,
+  "children": []
+},
+{
+  "id": 5,
+  "type": "media",
+  "parameters": {
+  "media-type": "image",
+  "filename": "img3.png",
+  "trigger": "картинка!",
+   "caption": " держи картинку",
+  "keyboard": "start_keyboard"
+  },
+  "father": 2,
+  "children": []
+},
+
+{
+  "id": 6,
+  "type": "message",
+  "parameters": {
+  "trigger": "музыка",
+   "message": "что выберете?",
+  "keyboard": "audio_keyboard"
+  },
+  "father": null,
+  "children": [7, 8]
+},
+
+{
+  "id": 7,
+  "type": "media",
+  "parameters": {
+  "media-type": "audio",
+  "filename": "pepe.mp3",
+  "trigger": "pepe",
+   "caption": "наслаждайся",
+  "keyboard": "start_keyboard"
+  },
+  "father": 6,
+  "children": []
+},
+
+{
+  "id": 8,
+  "type": "media",
+  "parameters": {
+  "media-type": "audio",
+  "filename": "lofi.mp3",
+  "trigger": "lofi",
+   "caption": "наслаждайся",
+  "keyboard": "start_keyboard"
+  },
+  "father": 6,
+  "children": []
+},
+
+{
+  "id": 9,
+  "type": "message",
+  "parameters": {
+  "trigger": "документы",
+   "message": "эй! Это секретная информация",
+  "keyboard": "document_keyboard"
+  },
+  "father": null,
+  "children": [10]
+},
+
+{
+  "id": 10,
+  "type": "media",
+  "parameters": {
+  "media-type": "audio",
+  "filename": "secret.txt",
+  "trigger": "суперсекретный документ",
+   "caption": "только никому не  показывай",
+  "keyboard": "start_keyboard"
+  },
+  "father": 9,
+  "children": []
+},
+
+{
+  "id": 11,
+  "type": "message",
+  "parameters": {
+  "trigger": "викторина",
+   "message": "Вы приняли участие в викторине! И у нас есть всего один вопрос. Вам нравится наш продукт?",
+  "keyboard": "quiz_keyboard"
+  },
+  "father": null,
+  "children": [12, 13]
+},
+
+{
+  "id": 12,
+  "type": "message",
+  "parameters": {
+  "trigger": "да.",
+   "message": "Мы очень рады!",
+  "keyboard": "start_keyboard"
+  },
+  "father": 11,
+  "children": []
+},
+
+{
+  "id": 13,
+  "type": "message",
+  "parameters": {
+  "trigger": "нет.",
+   "message": "Ваш ответ будет иметь последствия.",
+  "keyboard": "start_keyboard"
+  },
+  "father": 11,
+  "children": []
+}
+ ]
+}

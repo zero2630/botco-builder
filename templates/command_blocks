@@ -1,0 +1,37 @@
+from aiogram import Router
+from aiogram.types import Message
+from aiogram.filters import CommandStart, Command
+from aiogram.fsm.context import FSMContext
+from keyboards import reply
+
+import states
+
+router = Router()
+
+@router.message(CommandStart())
+async def start(message: Message, state: FSMContext):
+    {% if start_block.state -%}
+
+    await state.set_state(states.Line{{ start_block.root_block }}.{{ start_block.state }})
+
+    {%- endif %}
+    await message.answer(
+    "{{start_block.parameters.message}}",
+    {% if start_block.parameters.keyboard %}reply_markup=reply.{{ start_block.parameters.keyboard }}{% endif %}
+    )
+
+{%- for block in command_blocks %}
+
+@router.message(Command("{{ block.parameters.command }}"))
+async def command{{block.id}}(message: Message):
+    {% if block.state -%}
+
+    await state.set_state(states.Line{{ block.root_block }}.{{ block.state }})
+
+    {%- endif %}
+    await message.answer(
+    "{{block.parameters.message}}",
+    {% if block.parameters.keyboard %}reply_markup=reply.{{ block.parameters.keyboard }}{% endif %}
+    )
+
+{%- endfor -%}

@@ -1,0 +1,20 @@
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+
+{% for keyboard in keyboards -%}
+
+{{ keyboard.name }} = ReplyKeyboardMarkup(
+    keyboard=[
+
+        {% for row in keyboard.rows -%}
+        [
+            {% for button in row -%}
+                KeyboardButton(text="{{ button }}"),
+            {%- endfor %}
+        ],
+        {% endfor %}
+    ],
+    resize_keyboard=True,
+    one_time_keyboard=True,
+)
+
+{% endfor %}

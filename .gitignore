@@ -1,0 +1,7 @@
+bots/
+archives/
+venv/
+__pycache__/
+.idea/
+.env
+.env-non-dev

@@ -1,0 +1,11 @@
+from aiogram.fsm.state import StatesGroup, State
+
+{% for state_group in states %}
+
+class Line{{state_group}}(StatesGroup):
+    {%- for state in states.get(state_group) %}
+    {{state}} = State()
+
+    {%- endfor %}
+
+{%- endfor %}

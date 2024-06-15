@@ -17,12 +17,12 @@ services:
       context: .
     env_file:
       - .env-non-dev
-    container_name: fastapi_app
+    container_name: botco_fastapi
     ports:
       - 8001:8001
     depends_on:
       - db
-    command: ["/fastapi_app/app.sh"]
+    command: ["/botco_fastapi/app.sh"]
     volumes:
       - .:/usr/src/app
 

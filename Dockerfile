@@ -1,8 +1,8 @@
 FROM python:3.10
 
-RUN mkdir /fastapi_app
+RUN mkdir /botco_fastapi
 
-WORKDIR /fastapi_app
+WORKDIR /botco_fastapi
 
 COPY requirements.txt .
 

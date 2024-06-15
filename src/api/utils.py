@@ -2,7 +2,7 @@ import requests
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src import models
+from src.api import models
 
 __all__ = [
     "check_bot_and_user",

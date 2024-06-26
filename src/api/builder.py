@@ -143,7 +143,10 @@ async def build_default(bot_uid):
 
 # Создает главный скрипт бота
 async def build_base(bot_uid, handlers):
-    with Path(DATA_FOLDER + f"bots/{bot_uid}/bot.py").open(mode="w", encoding="utf-8") as f:
+    with Path(DATA_FOLDER + f"bots/{bot_uid}/bot.py").open(
+        mode="w",
+        encoding="utf-8",
+    ) as f:
         template = env.get_template("base")
         f.write(template.render(bot_uid=bot_uid, handlers=handlers))
 
@@ -196,7 +199,9 @@ async def check_media(media_blocks, bot_uid):
 
     for file in filenames:
         if file.name not in blueprint_files:
-            Path(DATA_FOLDER + f"bots/{bot_uid}/media/{file.name}").unlink(missing_ok=True)
+            Path(DATA_FOLDER + f"bots/{bot_uid}/media/{file.name}").unlink(
+                missing_ok=True,
+            )
 
 
 # Создает хэндлер для обработки команд
@@ -263,7 +268,11 @@ async def set_token(new_token, bot_uid):
 
 
 async def archive_bot(bot_uid):
-    shutil.make_archive(DATA_FOLDER + f"archives/{bot_uid}/bot", "zip", DATA_FOLDER + f"bots/{bot_uid}")
+    shutil.make_archive(
+        DATA_FOLDER + f"archives/{bot_uid}/bot",
+        "zip",
+        DATA_FOLDER + f"bots/{bot_uid}",
+    )
 
 
 if __name__ == "__main__":

@@ -1,22 +1,36 @@
 import datetime
 import subprocess
 
-from fastapi import Depends, APIRouter, UploadFile
+from fastapi import APIRouter, Depends, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy import delete, insert, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api import builder
-from src.api import utils
 from src.api import models
 from src.api import schemas
-from src.config import SECRET_KEY, DATA_FOLDER
+from src.api import utils
+from src.config import DATA_FOLDER, SECRET_KEY
 from src.database import get_async_session
 
-router = APIRouter(
-    prefix="/api",
-    tags=["API"]
-)
+__all__ = [
+    "activate",
+    "bot_add_media",
+    "bot_all",
+    "bot_archive",
+    "bot_delete",
+    "bot_info",
+    "build_bot",
+    "create_bot",
+    "create_user",
+    "deactivate_bot",
+    "delete_user",
+    "get_user",
+    "set_bot_token",
+]
+
+
+router = APIRouter(prefix="/api", tags=["API"])
 
 
 processes = {}
@@ -55,7 +69,9 @@ async def bot_info(
     if bot_res:
         return result
 
-    return "bot with this uid doesn't exists"
+    return await utils.return_answer(
+        errors=["bot with this uid doesn't exists"],
+    )
 
 
 @router.get("/user/allbots/")
@@ -66,7 +82,7 @@ async def bot_all(
     user_info = await utils.get_user_info(user_token, session)
     if not user_info:
         return await utils.return_answer(
-            errors=["user with this uid doesn't exists"],
+            errors=["user with this token doesn't exist"],
         )
 
     return await utils.get_all_bots(user_info.id, session)
@@ -131,15 +147,7 @@ async def set_bot_token(
     new_token: str,
     session: AsyncSession = Depends(get_async_session),
 ):
-    user_res = await utils.get_user_info(user_token, session)
-    bot_res = await utils.get_bot_info(bot_uid, session)
-    errors = []
-
-    if not user_res:
-        errors.append("user with this token doesn't exist")
-
-    if not bot_res:
-        errors.append("bot with this uid doesn't exist")
+    errors = await utils.check_bot_and_user(user_token, bot_uid, session)
 
     if not await utils.check_token(new_token):
         errors.append("your token isn't valid")
@@ -153,7 +161,7 @@ async def set_bot_token(
 
     await builder.set_token(new_token=new_token, bot_uid=bot_uid)
 
-    return await utils.return_answer(messages=["token was changed"])
+    return await utils.return_answer(messages=["ok"])
 
 
 @router.post("/user/create/")
@@ -167,11 +175,13 @@ async def create_user(
             user_stmt = insert(models.user).values(token=user_token)
             await session.execute(user_stmt)
             await session.commit()
-            return "ok"
+            return await utils.return_answer(messages=["ok"])
 
-        return "user with this uid already exists"
+        return await utils.return_answer(
+            errors=["user with this uid already exists"],
+        )
 
-    return "no roots"
+    return await utils.return_answer(errors=["no roots"])
 
 
 @router.post("/user/delete/")
@@ -186,9 +196,9 @@ async def delete_user(
         )
         await session.execute(user_stmt)
         await session.commit()
-        return "ok"
+        return await utils.return_answer(messages=["ok"])
 
-    return "no roots"
+    return await utils.return_answer(errors=["no roots"])
 
 
 @router.get("/user/{user_token}/get/")
@@ -229,7 +239,7 @@ async def create_bot(
     await session.execute(bot_stmt)
     await session.commit()
     await builder.build_default(bot_uid)
-    return "ok"
+    return await utils.return_answer(messages=["ok"])
 
 
 @router.post("/bot/{bot_uid}/build/")
@@ -240,6 +250,9 @@ async def build_bot(
     session: AsyncSession = Depends(get_async_session),
 ):
     errors = await utils.check_bot_and_user(user_token, bot_uid, session)
+    if not blueprint.model_dump(mode="python")["blocks"]:
+        errors.append("no blocks")
+
     if errors:
         return await utils.return_answer(errors=errors)
 
@@ -251,7 +264,7 @@ async def build_bot(
     await session.execute(stmt)
     await session.commit()
     await builder.build(blueprint.model_dump(mode="python"), bot_uid)
-    return await utils.return_answer(messages=["new bot was created"])
+    return await utils.return_answer(messages=["ok"])
 
 
 @router.post("/bot/{bot_uid}/add_media/")
@@ -266,7 +279,7 @@ async def bot_add_media(
         return await utils.return_answer(errors=errors)
 
     await builder.load_media(media_files, bot_uid)
-    return "ok"
+    return await utils.return_answer(messages=["ok"])
 
 
 @router.post("/bot/{bot_uid}/delete/")
@@ -283,7 +296,7 @@ async def bot_delete(
     await session.execute(bot_stmt)
     await session.commit()
     await builder.remove(bot_uid)
-    return "ok"
+    return await utils.return_answer(messages=["ok"])
 
 
 @router.get("/bot/{bot_uid}/archive/")

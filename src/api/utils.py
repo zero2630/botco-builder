@@ -17,7 +17,7 @@ __all__ = [
 async def check_token(token: str):
     data = requests.get(
         f"https://api.telegram.org/bot{token}/getMe",
-        timeout=3,
+        timeout=1,
     ).json()
 
     if data["ok"]:
@@ -54,6 +54,10 @@ async def check_bot_and_user(
 
     if not bot_res:
         errors.append("bot with this token doesn't exist")
+
+    if bot_res and user_res:
+        if bot_res.user_id != user_res.id:
+            errors.append("no roots")
 
     return errors
 

@@ -60,11 +60,11 @@
 
 {
   "id": 2,
-  "type": "message",
+  "type": "answer",
   "parameters": {
   "trigger": "картинки",
    "message": " ура! картинки!",
-  "keyboard": "start_keyboard"
+  "keyboard": "images_keyboard"
   },
   "father": null,
   "children": [3, 4, 5]
@@ -112,7 +112,7 @@
 
 {
   "id": 6,
-  "type": "message",
+  "type": "answer",
   "parameters": {
   "trigger": "музыка",
    "message": "что выберете?",
@@ -152,7 +152,7 @@
 
 {
   "id": 9,
-  "type": "message",
+  "type": "answer",
   "parameters": {
   "trigger": "документы",
    "message": "эй! Это секретная информация",
@@ -166,7 +166,7 @@
   "id": 10,
   "type": "media",
   "parameters": {
-  "media-type": "audio",
+  "media-type": "document",
   "filename": "secret.txt",
   "trigger": "суперсекретный документ",
    "caption": "только никому не  показывай",
@@ -178,7 +178,7 @@
 
 {
   "id": 11,
-  "type": "message",
+  "type": "answer",
   "parameters": {
   "trigger": "викторина",
    "message": "Вы приняли участие в викторине! И у нас есть всего один вопрос. Вам нравится наш продукт?",
@@ -190,7 +190,7 @@
 
 {
   "id": 12,
-  "type": "message",
+  "type": "answer",
   "parameters": {
   "trigger": "да.",
    "message": "Мы очень рады!",
@@ -202,7 +202,7 @@
 
 {
   "id": 13,
-  "type": "message",
+  "type": "answer",
   "parameters": {
   "trigger": "нет.",
    "message": "Ваш ответ будет иметь последствия.",

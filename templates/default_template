@@ -7,7 +7,7 @@ BOT_ID = {{ bot_id }}
 
 
 def load_token():
-    with open(f"bots/{BOT_ID}/conf.json") as f:
+    with open(f"/bots/{BOT_ID}/conf.json") as f:
         return json.load(f)["token"]
 
 
